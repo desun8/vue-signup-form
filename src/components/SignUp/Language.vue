@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Dropdown from '@/components/SignUp/Dropdown';
+import Dropdown from '@/components/SignUp/Dropdown/Dropdown';
 
 export default {
   name: 'Language',

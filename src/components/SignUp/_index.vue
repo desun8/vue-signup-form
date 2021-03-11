@@ -1,5 +1,5 @@
 <template>
-  <form action="">
+  <form action="/registration" @submit.prevent="handleSubmit">
     <div class="field">
       <label for="name">Имя</label>
       <input id="name"
@@ -11,8 +11,7 @@
              type="text"
              autocomplete="name"
              placeholder="Введите Ваше имя">
-      <!--   Сообщение об ошибке можно перенести в отдельный компонент   -->
-      <span class="error">Введено не корректное значение</span>
+      <ErrorMessage/>
     </div>
 
     <div class="field">
@@ -26,7 +25,7 @@
              type="text"
              autocomplete="email"
              placeholder="Введите ваш email">
-      <span class="error">Введено не корректное значение</span>
+      <ErrorMessage/>
     </div>
 
     <div class="field">
@@ -40,18 +39,23 @@
              type="tel"
              autocomplete="tel"
              placeholder="Введите номер телефона">
-      <span class="error">Введено не корректное значение</span>
+      <ErrorMessage/>
     </div>
 
     <div class="field">
       <label for="lang">Язык</label>
-      <Language id="lang" :set-value="setLangValue" :check-form="formValidation" :name="lang.name" :placeholder="'Язык'"/>
-      <span class="error">Введено не корректное значение</span>
+      <Language
+          id="lang"
+          :set-value="setFieldValue(lang)"
+          :check-form="formValidation"
+          :name="lang.name"
+          :placeholder="'Язык'"/>
+      <ErrorMessage/>
     </div>
 
-
     <Agreement :change-value="setFieldValue(agreement)" :check-form="formValidation"/>
-    <Submit :is-disabled="!isValid"/>
+
+    <SubmitBtn :is-disabled="!isValid"/>
   </form>
 </template>
 
@@ -59,11 +63,12 @@
 /* eslint-disable no-case-declarations */
 import Language from '@/components/SignUp/Language';
 import Agreement from '@/components/SignUp/Agreement';
-import Submit from '@/components/SignUp/Submit';
+import SubmitBtn from '@/components/SignUp/SubmitBtn';
+import ErrorMessage from '@/components/SignUp/ErrorMessage';
 
 export default {
   name: 'SignUp',
-  components: { Submit, Agreement, Language },
+  components: { ErrorMessage, SubmitBtn, Agreement, Language },
   data() {
     return {
       id: 'signup',
@@ -97,14 +102,6 @@ export default {
     };
   },
   methods: {
-    setLangValue(newVal) {
-      this.lang.value = newVal;
-    },
-
-    // setAgreementValue(newVal) {
-    //   this.agreement.value = newVal;
-    // },
-
     setFieldValue(field) {
       return function (newVal) {
         field.value = newVal;
@@ -114,10 +111,7 @@ export default {
     formValidation() {
       const fields = [this.name, this.email, this.tel, this.lang, this.agreement];
       const isValid = fields.every(el => el.value !== '' && el.value !== false && el.hasError === false);
-      console.log('is valid: ', isValid);
       this.isValid = isValid;
-
-      console.log(`Check Form. From is ${isValid ? 'valid' : 'invalid'}!`);
     },
 
     telValidation() {
@@ -178,8 +172,6 @@ export default {
         case this.tel.name:
           this.telValidation();
           break;
-        case this.lang.name:
-        default:
       }
 
       this.formValidation();
@@ -224,17 +216,36 @@ export default {
 
     handleBlur(e) {
       const type = e.target.getAttribute('name', '');
+      this.validation(type);
+    },
 
-      switch (type) {
-        case this.name.name:
-          this.validation(type);
-          break;
-        case this.email.name:
-          this.validation(type);
-          break;
-        case this.tel.name:
-          this.validation(type);
-          break;
+    handleSubmit(e) {
+      // Проверка перед отправкой
+      [this.name, this.email, this.tel].some(input => {
+        this.validation(input.name);
+        return input.hasError;
+      });
+
+      if (this.isValid) {
+        console.log('Send form!');
+
+        const inputs = [this.name, this.email, this.tel, this.lang, this.agreement];
+        const url = e.target.action || '/registration';
+        const data = new FormData();
+
+        inputs.forEach(input => {
+          data.append(input.name, input.value);
+        });
+
+        fetch(url, { method: 'POST', body: data })
+            .then(response => {
+              if (!response.ok) throw new Error(response.status);
+
+              return response.json();
+            })
+            .catch(error => {
+              console.error(error);
+            });
       }
     }
   }
@@ -286,25 +297,5 @@ label::first-letter {
   background-color: transparent !important;
   color: inherit !important;
   -webkit-box-shadow: 0 0 0 50px white inset;
-}
-
-.error {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  right: 0;
-
-  color: #ff7171;
-  font-size: 14px;
-
-  opacity: 0;
-  visibility: hidden;
-  transition-property: opacity, visibility;
-  transition-duration: 0.2s;
-}
-
-.field >>> input.has-error + .error {
-  opacity: 1;
-  visibility: visible;
 }
 </style>

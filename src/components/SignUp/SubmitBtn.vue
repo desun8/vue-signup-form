@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'Submit',
+  name: 'SubmitBtn',
   props: {
     isDisabled: Boolean
   }

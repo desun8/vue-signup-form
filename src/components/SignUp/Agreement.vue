@@ -1,6 +1,11 @@
 <template>
   <div class="c-checkbox">
-    <input v-model="checked" @change="handleChange" class="sr-only" id="agreement" type="checkbox">
+    <input
+        v-model="checked"
+        @change="handleChange"
+        id="agreement"
+        class="sr-only"
+        type="checkbox">
     <span class="c-checkbox__checkmark">
         <svg width="16" height="12" fill="none">
           <path class="path"
@@ -98,6 +103,4 @@ export default {
 .c-checkbox__label:hover .c-checkbox__checkmark {
   border-color: var(--c-blue);
 }
-
-
 </style>

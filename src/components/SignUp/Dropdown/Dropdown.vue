@@ -129,8 +129,6 @@ export default {
     document.addEventListener('click', (event) => {
       if (this.isActive) {
         if (event.target !== this.$refs.input) {
-          console.log('hide dropdown by click');
-
           this.closeDropdown();
         }
       }
@@ -156,7 +154,7 @@ input.is-active {
 }
 
 .dropdown-wrapper::after {
-  content: url("../../assets/arrow-down.svg");
+  content: url("arrow-down.svg");
   position: absolute;
   top: calc(50% - (30px / 2));
   right: 10px;
