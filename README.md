@@ -1,4 +1,5 @@
 # vue-signup-form
+Простая форма регистрации/входа. Демо - https://vue-signup.netlify.app/
 
 ## Задача
 
@@ -10,31 +11,7 @@
     - поле “Имя” не может содержать цифры и символы кроме пробела и дефиса
     - в поле “email” можно отправить только email.
     - в поле “номер телефона” можно ввести только 11 цифр, круглые скобки, дефис и знак плюс.
-
-## Project setup
-
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+4. Добавил:
+    - форма входа
+    - отображение компонента "Grateful" при успешной регистрации или входе
+    - переходы между компонентами
