@@ -1,14 +1,24 @@
 <template>
   <div id="app">
-    <Header :is-sign-up="isSignUp" :change-type="changeType"/>
-    <SignUp v-if="isSignUp"/>
-    <div v-else><h2>Форма входа</h2></div>
+    <transition name="fade-appear" mode="out-in">
+      <Grateful key="grateful" v-if="isGrateful" :type="type"/>
+
+      <div v-else class="wrapper">
+        <Header :is-sign-up="isSignUp" :change-type="changeType"/>
+        <transition name="fade-appear" mode="out-in">
+        <SignUp v-if="isSignUp" :set-is-grateful="setIsGrateful"/>
+        <SignIn v-else :set-is-grateful="setIsGrateful" />
+        </transition>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-import SignUp from '@/components/SignUp/_index';
+import SignUp from '@/components/SignUp/SignUp';
 import Header from '@/components/Header';
+import Grateful from '@/components/Grateful';
+import SignIn from '@/components/SignIn/SignIn';
 
 export const TYPE_SIGNUP = 'SIGNUP';
 export const TYPE_SIGNIN = 'SIGNIN';
@@ -16,13 +26,16 @@ export const TYPE_SIGNIN = 'SIGNIN';
 export default {
   name: 'App',
   components: {
+    SignIn,
+    Grateful,
     Header,
     SignUp,
   },
 
   data() {
     return {
-      type: TYPE_SIGNUP
+      type: TYPE_SIGNUP,
+      isGrateful: false,
     };
   },
 
@@ -35,6 +48,10 @@ export default {
   methods: {
     changeType(value) {
       this.type = value;
+    },
+
+    setIsGrateful(newVal) {
+      this.isGrateful = newVal;
     }
   }
 };
@@ -50,8 +67,6 @@ export default {
   --c-text: #756f86;
   --font: 'IBM Plex Sans', Avenir, Helvetica, Arial, sans-serif;
 
-  display: grid;
-  gap: 56px;
   width: min(500px, 100%);
   margin: 0 auto;
   padding: 40px 30px;
@@ -104,5 +119,20 @@ input {
 .link:hover::after,
 .btn--link:hover::after {
   transform: scaleX(1);
+}
+
+.fade-appear-enter-active, .fade-appear-leave-active {
+  transition: all 0.5s;
+}
+.fade-appear-enter, .fade-appear-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>
+
+<style scoped>
+.wrapper {
+  display: grid;
+  gap: 56px;
 }
 </style>

@@ -1,9 +1,18 @@
 <template>
-  <header>
-    <h1 class="title">{{ isSignUp ? 'Регистрация' : 'Вход' }}</h1>
-    <span v-if="isSignUp" class="message">Уже есть аккаунт? <button class="btn btn--link" type="button" @click="onClick">Войти</button></span>
-    <span v-else class="message">Нет аккаунта? <button class="btn btn--link" type="button" @click="onClick">Зарегистрироваться</button></span>
-  </header>
+  <div>
+    <transition name="fade-appear" mode="out-in">
+      <header key="header-signup" v-if="isSignUp">
+        <h1 class="title">Регистрация</h1>
+        <span class="message">Уже есть аккаунт? <button class="btn btn--link" type="button"
+                                                        @click="onClick">Войти</button></span>
+      </header>
+
+      <header key="header-signin" v-else>
+        <h1 class="title">Вход</h1>
+        <span class="message">Нет аккаунта? <button class="btn btn--link" type="button" @click="onClick">Зарегистрироваться</button></span>
+      </header>
+    </transition>
+  </div>
 </template>
 
 <script>

@@ -18,12 +18,11 @@
     <ul ref="dropdown" class="dropdown" v-show="isActive">
       <li
           class="dropdown__item"
-          v-for="item in items"
+          v-for="item in optionsItems"
           :key="item"
           @click="handleClick"
           tabindex="-1"
-      >{{ item }}
-      </li>
+      >{{ item }}</li>
     </ul>
   </div>
 </template>
@@ -33,7 +32,7 @@ export default {
 
   name: 'Dropdown',
   props: {
-    items: {
+    optionsItems: {
       type: Array,
       required: true
     },
@@ -41,7 +40,6 @@ export default {
     name: String,
     changeValue: Function,
     placeholder: String,
-    checkForm: Function
   },
   data() {
     return {
@@ -61,9 +59,8 @@ export default {
     },
 
     updateValue(newVal) {
-      this.value = newVal;
+      this.value = newVal.trim();
       this.changeValue(this.value);
-      this.checkForm();
     },
 
     handleClick(event) {
@@ -144,6 +141,9 @@ ul {
   list-style: none;
 }
 
+input {
+  cursor: pointer;
+}
 input.is-active {
   outline: var(--c-blue) auto 2px;
   border-color: var(--c-blue);
@@ -161,6 +161,7 @@ input.is-active {
   display: block;
   width: 30px;
   height: 30px;
+  cursor: pointer;
 }
 
 .dropdown {

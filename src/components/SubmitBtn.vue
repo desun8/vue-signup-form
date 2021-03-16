@@ -1,12 +1,20 @@
 <template>
-  <button class="btn" type="submit" :disabled="isDisabled">Зарегистрироваться</button>
+  <button class="btn" type="submit" :disabled="isDisabled">{{ text }}</button>
 </template>
 
 <script>
+import { TYPE_SIGNUP } from '@/App';
+
 export default {
   name: 'SubmitBtn',
   props: {
-    isDisabled: Boolean
+    isDisabled: Boolean,
+    type: String
+  },
+  computed: {
+    text() {
+      return this.type === TYPE_SIGNUP ? 'Зарегистрироваться' : 'Войти';
+    }
   }
 };
 </script>

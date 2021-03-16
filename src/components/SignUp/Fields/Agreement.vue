@@ -5,7 +5,9 @@
         @change="handleChange"
         id="agreement"
         class="sr-only"
-        type="checkbox">
+        type="checkbox"
+        name="agreement"
+    />
     <span class="c-checkbox__checkmark">
         <svg width="16" height="12" fill="none">
           <path class="path"
@@ -27,16 +29,14 @@
 export default {
   name: 'Agreement',
   props: {
-    changeValue: Function,
-    checkForm: Function,
+    setFormValue: Function,
   },
   data() {
     return { checked: '' };
   },
   methods: {
     handleChange() {
-      this.changeValue(this.checked);
-      this.checkForm();
+      this.setFormValue(this.checked);
     }
   }
 };
